@@ -162,10 +162,9 @@ def process_sections(img):
             "output": output_c  # Processed section image with circles drawn.
             
         }
-        cv2.imshow(sec_name, output_c)
+        
     
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    
     
     return results
 
