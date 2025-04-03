@@ -220,7 +220,7 @@ def open_dashboard(app):
             # For other pages, simply update content.
             content_label = customtkinter.CTkLabel(
                 master=content_frame,
-                text=f"{name} Page",
+                text=f"{name} Page is still under develepment",
                 font=('Montserrat', 24, 'bold'),
                 text_color=MAROON
             )
@@ -269,7 +269,7 @@ def open_dashboard(app):
 
     top_title = customtkinter.CTkLabel(
         master=topbar,
-        text="Welcome to CNSC TER Dashboard",
+        text="Temporary UI",
         font=('Montserrat', 18, 'bold'),
         text_color=MAROON
     )

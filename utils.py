@@ -10,7 +10,7 @@ def detect_circles(section_img, section_name="Section"):
         blurred, 
         cv2.HOUGH_GRADIENT, 
         dp=1.5, 
-        param1=50,
+        param1=100, 
         minDist=10,
         param2=30,
         minRadius=5,
@@ -23,7 +23,7 @@ def detect_circles(section_img, section_name="Section"):
     if circles is not None:
         circles = np.uint16(np.around(circles))
         for x, y, r in circles[0, :]:
-            cv2.circle(section_img, (x, y), r, (0, 255, 0), 2)
+            cv2.circle(section_img, (x, y), r, (0, 255, 0), 1)
             cv2.circle(section_img, (x, y), 2, (0, 255, 0), 3)
             
             detected.append((x, y, r))
