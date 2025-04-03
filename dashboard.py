@@ -1,3 +1,5 @@
+import os
+import sys
 import customtkinter
 import tkinter
 from tkinter import messagebox, filedialog
@@ -14,6 +16,18 @@ processed_results = None
 MAROON = "#800000"
 GOLD = "#FFD700"
 WHITE = "#FFFFFF"
+
+# Helper function to get absolute path to a resource.
+def resource_path(relative_path):
+    """
+    Get absolute path to resource, works for development and for PyInstaller.
+    """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS.
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.dirname(os.path.abspath(__file__))
+    return os.path.join(base_path, relative_path)
 
 def fix_orientation(pil_img):
     try:
@@ -38,10 +52,11 @@ def fix_orientation(pil_img):
         print("Error fixing orientation:", e)
     return pil_img
 
-# Load icon safely
+# Load icon safely using absolute paths.
 def load_icon(path, size):
     try:
-        return customtkinter.CTkImage(Image.open(path), size=size)
+        abs_path = resource_path(path)
+        return customtkinter.CTkImage(Image.open(abs_path), size=size)
     except Exception as e:
         print(f"Error loading {path}: {e}")
         return None
@@ -60,11 +75,11 @@ def open_dashboard(app):
     sidebar = customtkinter.CTkFrame(master=dashboard, width=260, fg_color=MAROON, corner_radius=0)
     sidebar.pack(side="left", fill="y")
 
-    # CNSC Logo
+    # CNSC Logo using resource_path.
     try:
         sidebar_logo = customtkinter.CTkImage(
-            light_image=Image.open("./assets/cnsc.jpg"),
-            dark_image=Image.open("./assets/cnsc.jpg"),
+            light_image=Image.open(resource_path("assets/cnsc.jpg")),
+            dark_image=Image.open(resource_path("assets/cnsc.jpg")),
             size=(60, 60)
         )
     except Exception as e:
@@ -76,11 +91,11 @@ def open_dashboard(app):
 
     # Button Icons
     icons = {
-        "Home": load_icon("./assets/home.png", (20, 20)),
-        "Scan": load_icon("./assets/scan.png", (20, 20)),
-        "Print": load_icon("./assets/print.png", (20, 20)),
-        "Results": load_icon("./assets/result.png", (20, 20)),
-        "Logout": load_icon("./assets/logout.png", (20, 20)),
+        "Home": load_icon("assets/home.png", (20, 20)),
+        "Scan": load_icon("assets/scan.png", (20, 20)),
+        "Print": load_icon("assets/print.png", (20, 20)),
+        "Results": load_icon("assets/result.png", (20, 20)),
+        "Logout": load_icon("assets/logout.png", (20, 20)),
     }
 
     # Content Area: Create a frame for content.
@@ -111,7 +126,6 @@ def open_dashboard(app):
                 # Optionally, resize the image if needed.
                 cv_img = cv2.cvtColor(np.array(pil_img), cv2.COLOR_RGB2BGR)
                 resized = cv2.resize(cv_img, (800, 1000))
-                
                 
                 # Call the main function to process the image.
                 processed_results = main.process_sections(resized)
@@ -215,12 +229,10 @@ def open_dashboard(app):
                     text_color=MAROON
                 )
                 no_result_label.place(relx=0.5, rely=0.5, anchor=tkinter.CENTER)
-
         else:
-            # For other pages, simply update content.
             content_label = customtkinter.CTkLabel(
                 master=content_frame,
-                text=f"{name} Page is still under develepment",
+                text=f"{name} Page is still under development",
                 font=('Montserrat', 24, 'bold'),
                 text_color=MAROON
             )
@@ -269,7 +281,7 @@ def open_dashboard(app):
 
     top_title = customtkinter.CTkLabel(
         master=topbar,
-        text="Temporary UI",
+        text="Welcome to CNSC TER Dashboard",
         font=('Montserrat', 18, 'bold'),
         text_color=MAROON
     )

@@ -1,7 +1,19 @@
+import os
+import sys
 import tkinter
 import customtkinter
 from PIL import Image
 from dashboard import open_dashboard  # 👈 Import from the other file
+
+# Helper function to get absolute path to a resource.
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller. """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS.
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.dirname(os.path.abspath(__file__))
+    return os.path.join(base_path, relative_path)
 
 customtkinter.set_appearance_mode("light")
 customtkinter.set_default_color_theme("dark-blue")
@@ -20,10 +32,11 @@ app.configure(bg=MAROON)
 frame = customtkinter.CTkFrame(master=app, width=360, height=420, corner_radius=20, fg_color=WHITE)
 frame.place(relx=0.5, rely=0.5, anchor=tkinter.CENTER)
 
-# CNSC logo
+# CNSC logo using absolute path
+logo_path = resource_path("assets/cnsc.jpg")
 small_logo = customtkinter.CTkImage(
-    light_image=Image.open("./assets/cnsc.jpg"),
-    dark_image=Image.open("./assets/cnsc.jpg"),
+    light_image=Image.open(logo_path),
+    dark_image=Image.open(logo_path),
     size=(60, 60)
 )
 logo_label = customtkinter.CTkLabel(master=frame, image=small_logo, text="")
@@ -41,14 +54,23 @@ entry1.place(relx=0.5, y=150, anchor=tkinter.CENTER)
 entry2 = customtkinter.CTkEntry(master=frame, width=260, height=40, placeholder_text='Password', show="*", font=('Montserrat', 13))
 entry2.place(relx=0.5, y=200, anchor=tkinter.CENTER)
 
-# Forget Password
+# Forgot Password
 l3 = customtkinter.CTkLabel(master=frame, text="Forgot password?", font=('Montserrat', 12), text_color="gray")
 l3.place(relx=0.85, y=235, anchor=tkinter.E)
 
 # Login Button
-button1 = customtkinter.CTkButton(master=frame, width=260, height=40, text="Login", command=lambda: open_dashboard(app),
-                                  font=('Montserrat', 14), corner_radius=8,
-                                  fg_color=MAROON, hover_color="#660000", text_color=WHITE)
+button1 = customtkinter.CTkButton(
+    master=frame,
+    width=260,
+    height=40,
+    text="Login",
+    command=lambda: open_dashboard(app),
+    font=('Montserrat', 14),
+    corner_radius=8,
+    fg_color=MAROON,
+    hover_color="#660000",
+    text_color=WHITE
+)
 button1.place(relx=0.5, y=290, anchor=tkinter.CENTER)
 
 app.mainloop()
